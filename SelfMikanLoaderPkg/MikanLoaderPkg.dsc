@@ -28,5 +28,5 @@
 
 #@range_begin(components)
 [Components]
-  MikanLoaderPkg/Loader.inf
+  SelfMikanLoaderPkg/Loader.inf
 #@range_end(components)
