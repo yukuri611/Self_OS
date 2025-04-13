@@ -1,5 +1,7 @@
 #include <cstdint>
 #include <cstddef>
+#include <cstdio>
+
 #include "frame_buffer_config.hpp"
 #include "graphics.hpp"
 #include "font.hpp"
@@ -33,20 +35,20 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
     
     for (int x = 0; x < frame_buffer_config.horizontal_resolution; ++x) {
         for (int y = 0; y < frame_buffer_config.vertical_resolution; ++y) {
-            pixel_writer->Write(x, y, {100,000,000});
+            pixel_writer->Write(x, y, {0x10,0x2E,0x50});
         }
     }
     for (int x = 0; x < 100; ++x) {
         for (int y = 0; y < 100; ++y) {
-            pixel_writer->Write(x, y, {0,200,0});
+            pixel_writer->Write(x, y, {0xE7,0x8B,0x48});
         }
     }
 
-    int i = 0;
-    for (char c = '!'; c <= '~'; ++c, ++i) {
-        WriteAscii(*pixel_writer, 8 * i, 50, c, {0, 0, 0});
-    }
+    char buf[128];
+    WriteString(*pixel_writer, 0, 80, "Hello yukuri611", {255,255,255});
+    sprintf(buf, "1 + 2 = %d", 1 + 2);
+    WriteString(*pixel_writer, 0, 100, buf, {255,255,255});
     while (1) {
         __asm__("hlt");
     }
-}
+} 
