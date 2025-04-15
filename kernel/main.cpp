@@ -1,3 +1,4 @@
+
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
@@ -7,16 +8,18 @@
 
 #include "frame_buffer_config.hpp"
 #include "graphics.hpp"
+#include "mouse.hpp"
 #include "font.hpp"
 #include "console.hpp"
 #include "pci.hpp"
-#include "mouse.hpp"
 #include "logger.hpp"
 #include "usb/memory.hpp"
 #include "usb/device.hpp"
 #include "usb/classdriver/mouse.hpp"
 #include "usb/xhci/xhci.hpp"
 #include "usb/xhci/trb.hpp"
+#include "interrupt.hpp"
+#include "asmfunc.h"
 
 
 const PixelColor kDesktopBGColor{16,46,80};
@@ -68,6 +71,19 @@ void SwitchEhci2Xhci(const pci::Device& xhc_dev) {
     pci::WriteConfReg(xhc_dev, 0xd0, ehci2xhci_ports); // XUSB2PR
     Log(kDebug, "SwitchEhci2Xhci: SS = %02, xHCI = %02x\n",
         superspeed_ports, ehci2xhci_ports);
+}
+
+usb::xhci::Controller* xhc;
+
+__attribute__((interrupt))
+void IntHandlerXHCI(InterruptFrame* frame) {
+    while (xhc->PrimaryEventRing()->HasFront()) {
+        if (auto err = ProcessEvent(*xhc)) {
+            Log(kError, "Error while ProcessEvent: %s at %s:%d\n",
+                err.Name(), err.File(), err.Line());
+        }
+    }
+    NotifyEndOfInterrupt();
 }
 
 extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
@@ -142,11 +158,24 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
     }
 
     if (xhc_dev) {
-        Log(kInfo, "xHC has been found: %d.%d.%d\n",
-            xhc_dev->bus, xhc_dev->device, xhc_dev->function);
         printk("xHC has been found: %d.%d.%d\n",
             xhc_dev->bus, xhc_dev->device, xhc_dev->function);        
     }
+
+    // load IDT
+    const uint16_t cs = GetCS();
+    SetIDTEntry(idt[InterruptVector::kXHCI],
+            MakeIDTAttr(DescriptorType::kInterruptGate, 0),
+            reinterpret_cast<uint64_t>(IntHandlerXHCI), cs);
+    LoadIDT(sizeof(idt)-1, reinterpret_cast<uint64_t>(&idt[0]));
+    
+    const uint8_t bsp_local_apic_id = 
+        *reinterpret_cast<uint8_t*>(0xfee00020) >> 24;
+    pci::ConfigureMSIFixedDestination(
+        *xhc_dev, bsp_local_apic_id,
+        pci::MSITriggerMode::kLevel, pci::MSIDeliveryMode::kFixed,
+        InterruptVector::kXHCI, 0);
+
 
     // Read xHC MMIO address
     const WithError<uint64_t> xhc_bar = pci::ReadBar(*xhc_dev, 0); // read BAR0 which is storing MMIO address
@@ -166,6 +195,9 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
     Log(kInfo, "xHC starting\n");
     xhc.Run();
 
+    ::xhc = &xhc;
+  __asm__("sti");
+
     // configure port
     usb::HIDMouseDriver::default_observer = MouseObserver;
 
@@ -179,13 +211,6 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
                     err.Name(), err.File(), err.Line());
                 continue;
             }
-        }
-    }
-
-    while (1) {
-        if (auto err = ProcessEvent(xhc)) {
-            Log(kError, "Error while ProcessEvent: %s at %s:%d\n",
-                err.Name(), err.File(), err.Line());
         }
     }
 

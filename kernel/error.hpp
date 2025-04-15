@@ -26,6 +26,7 @@ class Error {
     kInvalidPhase,
     kUnknownXHCISpeedID,
     kNoWaiter,
+    kNoPCIMSI,
     kLastOfCode,  // この列挙子は常に最後に配置する
   };
 
@@ -51,6 +52,7 @@ class Error {
     "kInvalidPhase",
     "kUnknownXHCISpeedID",
     "kNoWaiter",
+    "kNoPCIMSI",
   };
   static_assert(Error::Code::kLastOfCode == code_names_.size());
 
@@ -84,7 +86,6 @@ class Error {
 };
 
 #define MAKE_ERROR(code) Error((code), __FILE__, __LINE__)
-
 
 template <class T>
 struct WithError {
