@@ -34,15 +34,12 @@ usb/xhci/device.o: usb/xhci/device.cpp usb/xhci/device.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/_ansi.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/functional \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
-  usb/device.hpp \
+  usb/device.hpp usb/setupdata.hpp usb/endpoint.hpp usb/arraymap.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
+  usb/xhci/context.hpp usb/xhci/trb.hpp usb/xhci/registers.hpp \
+  register.hpp logger.hpp usb/memory.hpp usb/xhci/ring.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/vector \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__bit_reference \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/climits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
-  usb/arraymap.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
-  usb/classdriver/base.hpp usb/endpoint.hpp usb/setupdata.hpp \
-  usb/descriptor.hpp usb/xhci/context.hpp usb/xhci/trb.hpp \
-  usb/xhci/registers.hpp register.hpp logger.hpp usb/memory.hpp \
-  usb/xhci/ring.hpp
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer

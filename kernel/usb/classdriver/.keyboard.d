@@ -28,28 +28,12 @@ usb/classdriver/keyboard.o: usb/classdriver/keyboard.cpp usb/classdriver/keyboar
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cassert \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/assert.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/_ansi.h \
-  usb/classdriver/hid.hpp usb/classdriver/base.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/vector \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__bit_reference \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/algorithm \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/climits \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
-  error.hpp \
+  usb/classdriver/hid.hpp usb/classdriver/base.hpp error.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array \
-  usb/endpoint.hpp usb/setupdata.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bitset \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/string \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/string_view \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__string \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cwchar \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cwctype \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cctype \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/ctype.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/wctype.h \
-  usb/memory.hpp usb/device.hpp usb/arraymap.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
-  usb/descriptor.hpp
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/algorithm \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
+  usb/endpoint.hpp usb/setupdata.hpp usb/memory.hpp usb/device.hpp \
+  usb/arraymap.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional

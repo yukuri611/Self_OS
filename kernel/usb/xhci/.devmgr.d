@@ -35,13 +35,6 @@ usb/xhci/devmgr.o: usb/xhci/devmgr.cpp usb/xhci/devmgr.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/functional \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
   usb/xhci/context.hpp usb/endpoint.hpp usb/xhci/device.hpp \
-  usb/device.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/vector \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__bit_reference \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/climits \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
-  usb/arraymap.hpp \
+  usb/device.hpp usb/setupdata.hpp usb/arraymap.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
-  usb/classdriver/base.hpp usb/setupdata.hpp usb/descriptor.hpp \
   usb/xhci/trb.hpp usb/xhci/registers.hpp register.hpp usb/memory.hpp

@@ -42,6 +42,5 @@ usb/xhci/port.o: usb/xhci/port.cpp usb/xhci/port.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
   usb/memory.hpp usb/xhci/trb.hpp usb/xhci/devmgr.hpp \
-  usb/xhci/device.hpp usb/device.hpp usb/arraymap.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
-  usb/classdriver/base.hpp usb/setupdata.hpp usb/descriptor.hpp
+  usb/xhci/device.hpp usb/device.hpp usb/setupdata.hpp usb/arraymap.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional
