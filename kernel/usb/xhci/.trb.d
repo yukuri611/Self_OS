@@ -1,14 +1,11 @@
-main.o: main.cpp \
+usb/xhci/trb.o: usb/xhci/trb.cpp usb/xhci/trb.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdint \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__config \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdint.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstddef \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/version \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h \
-  frame_buffer_config.hpp graphics.hpp font.hpp console.hpp pci.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tuple \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstddef \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/version \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/type_traits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/utility \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/initializer_list \
@@ -34,4 +31,6 @@ main.o: main.cpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/_ansi.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/functional \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
-  error.hpp
+  usb/xhci/context.hpp usb/endpoint.hpp error.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h

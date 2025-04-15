@@ -1,19 +1,16 @@
-main.o: main.cpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdint \
+usb/device.o: usb/device.cpp usb/device.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__config \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdint.h \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tuple \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstddef \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/version \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h \
-  frame_buffer_config.hpp graphics.hpp font.hpp console.hpp pci.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tuple \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/type_traits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/utility \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/initializer_list \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstring \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/string.h \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdint \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdint.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__debug \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/iterator \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/iosfwd \
@@ -34,4 +31,18 @@ main.o: main.cpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/_ansi.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/functional \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
-  error.hpp
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/vector \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__bit_reference \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/climits \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
+  error.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h \
+  usb/arraymap.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
+  usb/classdriver/base.hpp usb/endpoint.hpp usb/setupdata.hpp \
+  usb/descriptor.hpp usb/classdriver/cdc.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/deque \
+  usb/classdriver/keyboard.hpp usb/classdriver/hid.hpp \
+  usb/classdriver/mouse.hpp logger.hpp

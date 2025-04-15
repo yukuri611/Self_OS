@@ -17,7 +17,7 @@ class PixelWriter {
 
     protected:
         uint8_t* PixelAt(int x, int y) {
-            return config_.frame_buffer + 4 * (config_.pixels_per_scan_line * y + x);
+            return config_.frame_buffer + 4 * (config_.pixels_per_scan_line * y + x); //1pixel = 4 bytes
         }
     
     private:
@@ -36,3 +36,15 @@ class BGRResv8BitPerColorPixelWriter : public PixelWriter {
         using PixelWriter::PixelWriter;
         virtual void Write(int x, int y, const PixelColor& c) override;
 };
+
+
+template <typename T>
+struct Vector2D {
+  T x, y;
+};
+
+void DrawRectangle(PixelWriter& writer, const Vector2D<int>& pos,
+    const Vector2D<int>& size, const PixelColor& c);
+
+void FillRectangle(PixelWriter& writer, const Vector2D<int>& pos,
+    const Vector2D<int>& size, const PixelColor& c);
