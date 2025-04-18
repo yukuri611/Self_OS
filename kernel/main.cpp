@@ -1,36 +1,34 @@
-#include <cstdint>
-#include <cstddef>
-#include <cstdio>
-
-#include <numeric>
-#include <vector>
-
-#include "frame_buffer_config.hpp"
-#include "memory_map.hpp"
-#include "graphics.hpp"
-#include "mouse.hpp"
-#include "font.hpp"
-#include "console.hpp"
-#include "pci.hpp"
-#include "logger.hpp"
-#include "usb/memory.hpp"
-#include "usb/device.hpp"
-#include "usb/classdriver/mouse.hpp"
-#include "usb/xhci/xhci.hpp"
-#include "usb/xhci/trb.hpp"
-#include "interrupt.hpp"
-#include "asmfunc.h"
-#include "queue.hpp"
-#include "segment.hpp"
-#include "paging.hpp"
-#include "memory_manager.hpp"
-
-const PixelColor kDesktopBGColor{16,46,80};
-const PixelColor kDesktopFGColor{255,255,255};
-
+ #include <cstdint>
+ #include <cstddef>
+ #include <cstdio>
+ 
+ #include <numeric>
+ #include <vector>
+ 
+ #include "frame_buffer_config.hpp"
+ #include "memory_map.hpp"
+ #include "graphics.hpp"
+ #include "mouse.hpp"
+ #include "font.hpp"
+ #include "console.hpp"
+ #include "pci.hpp"
+ #include "logger.hpp"
+ #include "usb/memory.hpp"
+ #include "usb/device.hpp"
+ #include "usb/classdriver/mouse.hpp"
+ #include "usb/xhci/xhci.hpp"
+ #include "usb/xhci/trb.hpp"
+ #include "interrupt.hpp"
+ #include "asmfunc.h"
+ #include "queue.hpp"
+ #include "segment.hpp"
+ #include "paging.hpp"
+ #include "memory_manager.hpp"
+ #include "window.hpp"
+ #include "layer.hpp"
 
 char pixel_writer_buf[sizeof(RGBResv8BitPerColorPixelWriter)];
-PixelWriter* pixel_writer;
+PixelWriter* pixel_writer; // PixelWriter for writing on the screen
 
 char console_buf[sizeof(Console)];
 Console* console;
@@ -51,11 +49,11 @@ int printk(const char* format, ...) {
 char memory_manager_buf[sizeof(BitmapMemoryManager)];
 BitmapMemoryManager* memory_manager;
 
-char mouse_cursor_buf[sizeof(MouseCursor)];
-MouseCursor* mouse_cursor;
+unsigned int mouse_layer_id;
 
 void MouseObserver(int8_t displacement_x, int8_t displacement_y) {
-    mouse_cursor->MoveRelative({displacement_x, displacement_y});
+    layer_manager->MoveRelative(mouse_layer_id, {displacement_x, displacement_y});
+    layer_manager->Draw();
 }
 
 void SwitchEhci2Xhci(const pci::Device& xhc_dev) {
@@ -110,33 +108,21 @@ extern "C" void KernelMainNewStack(
             break;
         case kPixelBGRResv8BitPerColor:
             pixel_writer = new(pixel_writer_buf)
-            BGRResv8BitPerColorPixelWriter{frame_buffer_config};
-            break;
+                BGRResv8BitPerColorPixelWriter{frame_buffer_config};
+            break; 
     }
 
-    const int kFrameWidth = frame_buffer_config.horizontal_resolution;
-    const int kFrameHeight = frame_buffer_config.vertical_resolution;
-    FillRectangle(*pixel_writer,
-        {0, 0},
-        {kFrameWidth, kFrameHeight - 50},
-        kDesktopBGColor);
-    FillRectangle(*pixel_writer,
-            {0, kFrameHeight - 50},
-            {kFrameWidth, 50},
-            {1, 8, 17});
-    FillRectangle(*pixel_writer,
-            {0, kFrameHeight - 50},
-            {kFrameWidth / 5, 50},
-            {80, 80, 80});
-    DrawRectangle(*pixel_writer,
-            {10, kFrameHeight - 40},
-            {30, 30},
-            {160, 160, 160});
+    DrawDesktop(*pixel_writer);
+
     console = new(console_buf) Console{
-        *pixel_writer, kDesktopFGColor, kDesktopBGColor
+        kDesktopFGColor, kDesktopBGColor
     };
+
+    console->SetWriter(pixel_writer);
     printk("Hello, yukuri611!\n");
     SetLogLevel(kWarn);
+
+
 
     SetupSegments();
 
@@ -147,14 +133,16 @@ extern "C" void KernelMainNewStack(
 
     SetupIdentityPageTable();
 
-    ::memory_manager = new(memory_manager_buf) BitmapMemoryManager;
+    memory_manager = new(memory_manager_buf) BitmapMemoryManager;
     const auto memory_map_base = reinterpret_cast<uintptr_t>(memory_map.buffer);
     uintptr_t available_end = 0;
+    
     for (uintptr_t iter = memory_map_base; 
             iter < memory_map_base + memory_map.map_size;
             iter += memory_map.descriptor_size) {
         auto desc = reinterpret_cast<const MemoryDescriptor*>(iter);
         if (available_end < desc->physical_start) {
+            // Mark the memory between available_end and desc->physical_start as allocated
             memory_manager->MarkAllocated(
                 FrameID{available_end / kBytesPerFrame},
                 (desc->physical_start - available_end) / kBytesPerFrame);
@@ -173,9 +161,11 @@ extern "C" void KernelMainNewStack(
     
     memory_manager->SetMemoryRange(FrameID{1}, FrameID{available_end / kBytesPerFrame});
     
-    mouse_cursor = new(mouse_cursor_buf) MouseCursor{
-        pixel_writer, kDesktopBGColor, {300, 200}
-    };
+    if (auto err = InitializeHeap(*memory_manager)) {
+        Log(kError, "Failed to initialize heap: %s at %s:%d\n",
+            err.Name(), err.File(), err.Line());
+        exit(1);
+    }
 
     std::array<Message, 32> main_queue_data;
     ArrayQueue<Message> main_queue{main_queue_data};
@@ -261,6 +251,40 @@ extern "C" void KernelMainNewStack(
             }
         }
     }
+
+    //main_window
+    const int kFrameWidth = frame_buffer_config.horizontal_resolution;
+    const int kFrameHeight = frame_buffer_config.vertical_resolution;
+
+    auto bgwindow = std::make_shared<Window>(kFrameWidth, kFrameHeight);
+    auto bgwriter = bgwindow->Writer();
+
+    DrawDesktop(*bgwriter);
+    console->SetWriter(bgwriter);
+
+    auto mouse_window = std::make_shared<Window>(
+        kMouseCursorWidth, kMouseCursorHeight);
+    mouse_window->SetTransparentColor(kMouseTransparentColor);
+    DrawMouseCursor(mouse_window->Writer(), {0, 0});
+
+    layer_manager = new LayerManager;
+    // set pixel_writer as the writer of layer_manager so that it can write to the screen
+    layer_manager->SetWriter(pixel_writer);  
+    
+    auto bglayer_id = layer_manager->NewLayer()
+        .SetWindow(bgwindow)
+        .Move({0,0})
+        .ID();
+    mouse_layer_id = layer_manager->NewLayer()
+        .SetWindow(mouse_window)
+        .Move({200,200})
+        .ID();
+    
+    layer_manager->UpDown(bglayer_id, 0);
+    layer_manager->UpDown(mouse_layer_id, 1);
+    // Draw the layers to the screen in order of heights
+    layer_manager->Draw();
+
 
     while (true) {
         __asm__("cli");

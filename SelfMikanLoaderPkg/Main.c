@@ -20,6 +20,7 @@ EFI_STATUS GetMemoryMap(struct MemoryMap* map) {
     }
 
     map->map_size = map->buffer_size;
+    //gBS is used to instruct the EFI Boot Service (Firmware) 
     return gBS->GetMemoryMap(
         &map->map_size,
         (EFI_MEMORY_DESCRIPTOR*)map->buffer,
@@ -193,8 +194,8 @@ void CopyLoadSegment(Elf64_Ehdr* ehdr) {
 
         UINT64 segm_in_file = (UINT64)ehdr + phdr[i].p_offset;
         CopyMem(
-            (VOID*)phdr[i].p_vaddr,
-            (VOID*)segm_in_file,
+            (VOID*)phdr[i].p_vaddr, //address to copy to
+            (VOID*)segm_in_file, //address to copy from
             phdr[i].p_filesz);
 
         UINTN remain_bytes = phdr[i].p_memsz - phdr[i].p_filesz;
@@ -209,8 +210,7 @@ EFI_STATUS EFIAPI UefiMain(
     EFI_SYSTEM_TABLE* system_table) {
     
     EFI_STATUS status;
-    Print(L"Hello, yukuri611!\n");
-    
+
     CHAR8 memmap_buf[4096 * 4];
     struct MemoryMap memmap = {sizeof(memmap_buf), memmap_buf, 0, 0, 0, 0};
     status = GetMemoryMap(&memmap);
@@ -253,21 +253,6 @@ EFI_STATUS EFIAPI UefiMain(
         Halt();
     }
     
-    UINT8* frame_buffer = (UINT8*)gop->Mode->FrameBufferBase;
-    for (UINTN i = 0; i < gop->Mode->FrameBufferSize; ++i) {
-        frame_buffer[i] = 255;
-    }
-
-
-    Print(L"Resolution: %ux%u, Pixel Format: %s, %u pixels/line\n",
-      gop->Mode->Info->HorizontalResolution,
-      gop->Mode->Info->VerticalResolution,
-      GetPixelFormatUnicode(gop->Mode->Info->PixelFormat),
-      gop->Mode->Info->PixelsPerScanLine);
-    Print(L"Frame Buffer: 0x%0lx - 0x%0lx, Size: %lu bytes\n",
-        gop->Mode->FrameBufferBase,
-        gop->Mode->FrameBufferBase + gop->Mode->FrameBufferSize,
-        gop->Mode->FrameBufferSize);
 
 
     //opening kernel
@@ -334,7 +319,7 @@ EFI_STATUS EFIAPI UefiMain(
 
     //bootservice exit
     status = gBS->ExitBootServices(image_handle, memmap.map_key);
-    if (EFI_ERROR(status)) {
+    if (EFI_ERROR(status)) { //make sure that memory map is not changed(newest version) so that we can pass the correct version to kernel.
         status = GetMemoryMap(&memmap);
         if (EFI_ERROR(status)) {
             Print(L"GetMemoryMap failed: %r\n", status);
@@ -376,10 +361,12 @@ EFI_STATUS EFIAPI UefiMain(
     typedef void EntryPointType(const struct FrameBufferConfig*,
                                 const struct MemoryMap*);
     EntryPointType* entry_point = (EntryPointType*)entry_addr;
-    entry_point(&config, &memmap);
+    entry_point(&config, &memmap); // This won't return
     
     Print(L"All done\n");
 
-    while (1);
+    while (1) {
+        __asm__("hlt");  // halt CPU
+    }
     return EFI_SUCCESS;
 }
