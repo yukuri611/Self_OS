@@ -273,7 +273,16 @@ extern "C" void KernelMainNewStack(
         kMouseCursorWidth, kMouseCursorHeight, frame_buffer_config.pixel_format);
     mouse_window->SetTransparentColor(kMouseTransparentColor);
     DrawMouseCursor(mouse_window->Writer(), {0, 0});
+    mouse_position = {200, 200};
+
+    auto main_window = std::make_shared<Window>(
+        160, 68, frame_buffer_config.pixel_format);
+    DrawWindow(*main_window->Writer(), "Hello, window!");
+    WriteString(*main_window->Writer(), {24,28}, "Welcome from", {0, 0, 0});
+    WriteString(*main_window->Writer(), {24,44}, "yukuri611!", {0, 0, 0});
     
+
+
     FrameBuffer screen;
     if (auto err = screen.Initialize(frame_buffer_config)) {
         Log(kError, "failed to initialize frame buffer: %s at %s:%d\n",
@@ -291,9 +300,15 @@ extern "C" void KernelMainNewStack(
         .SetWindow(mouse_window)
         .Move({200,200})
         .ID();
+    auto main_window_layer_id = layer_manager->NewLayer()
+        .SetWindow(main_window)
+        .Move({100, 100})
+        .ID();
     
     layer_manager->UpDown(bglayer_id, 0);
     layer_manager->UpDown(mouse_layer_id, 1);
+    layer_manager->UpDown(main_window_layer_id, 1);
+
     // Draw the layers to the screen in order of heights
     layer_manager->Draw();
 
