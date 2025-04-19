@@ -41,4 +41,7 @@ console.o: console.cpp console.hpp graphics.hpp frame_buffer_config.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/climits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
-  window.hpp
+  window.hpp frame_buffer.hpp error.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array
