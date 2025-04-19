@@ -1,12 +1,6 @@
-console.o: console.cpp console.hpp graphics.hpp frame_buffer_config.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdint.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__config \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstring \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/string.h \
-  font.hpp \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdint \
-  layer.hpp \
+console.o: console.cpp console.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/memory \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__config \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/type_traits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstddef \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/version \
@@ -14,10 +8,14 @@ console.o: console.cpp console.hpp graphics.hpp frame_buffer_config.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/exception \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdlib \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdlib.h \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdint \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdint.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/new \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/utility \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tuple \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/initializer_list \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstring \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/string.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__debug \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/iterator \
@@ -29,19 +27,22 @@ console.o: console.cpp console.hpp graphics.hpp frame_buffer_config.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cassert \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/assert.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/_ansi.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/map \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tree \
+  graphics.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/algorithm \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/functional \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/bit \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__node_handle \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
+  frame_buffer_config.hpp window.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/vector \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__bit_reference \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/climits \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/limits.h \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__split_buffer \
-  window.hpp frame_buffer.hpp error.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/optional \
+  frame_buffer.hpp error.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/cstdio \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/stdio.h \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/array \
+  font.hpp layer.hpp \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/map \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tree \
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__node_handle
