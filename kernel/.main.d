@@ -53,5 +53,4 @@ main.o: main.cpp \
   memory_manager.hpp layer.hpp \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/map \
   /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__tree \
-  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__node_handle \
-  timer.hpp
+  /home/yukiiwahashi/osbook/devenv/x86_64-elf/include/c++/v1/__node_handle

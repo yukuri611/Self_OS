@@ -1,32 +1,32 @@
- #include <cstdint>
- #include <cstddef>
- #include <cstdio>
- 
- #include <numeric>
- #include <vector>
- 
- #include "frame_buffer_config.hpp"
- #include "memory_map.hpp"
- #include "graphics.hpp"
- #include "mouse.hpp"
- #include "font.hpp"
- #include "console.hpp"
- #include "pci.hpp"
- #include "logger.hpp"
- #include "usb/memory.hpp"
- #include "usb/device.hpp"
- #include "usb/classdriver/mouse.hpp"
- #include "usb/xhci/xhci.hpp"
- #include "usb/xhci/trb.hpp"
- #include "interrupt.hpp"
- #include "asmfunc.h"
- #include "queue.hpp"
- #include "segment.hpp"
- #include "paging.hpp"
- #include "memory_manager.hpp"
- #include "window.hpp"
- #include "layer.hpp"
- #include "timer.hpp"
+#include <cstdint>
+#include <cstddef>
+#include <cstdio>
+
+#include <numeric>
+#include <vector>
+
+#include "frame_buffer_config.hpp"
+#include "memory_map.hpp"
+#include "graphics.hpp"
+#include "mouse.hpp"
+#include "font.hpp"
+#include "console.hpp"
+#include "pci.hpp"
+#include "logger.hpp"
+#include "usb/memory.hpp"
+#include "usb/device.hpp"
+#include "usb/classdriver/mouse.hpp"
+#include "usb/xhci/xhci.hpp"
+#include "usb/xhci/trb.hpp"
+#include "interrupt.hpp"
+#include "asmfunc.h"
+#include "queue.hpp"
+#include "segment.hpp"
+#include "paging.hpp"
+#include "memory_manager.hpp"
+#include "window.hpp"
+#include "layer.hpp"
+
 
 char pixel_writer_buf[sizeof(RGBResv8BitPerColorPixelWriter)];
 PixelWriter* pixel_writer; // PixelWriter for writing on the screen
@@ -59,7 +59,6 @@ void MouseObserver(int8_t displacement_x, int8_t displacement_y) {
     newpos = ElementMin(newpos, screen_size + Vector2D<int>{-1, -1});
     mouse_position = ElementMax(newpos, {0, 0});
     layer_manager->Move(mouse_layer_id, mouse_position);
-    layer_manager->Draw();
 }
 
 void SwitchEhci2Xhci(const pci::Device& xhc_dev) {
@@ -127,8 +126,6 @@ extern "C" void KernelMainNewStack(
     console->SetWriter(pixel_writer);
     printk("Hello, yukuri611!\n");
     SetLogLevel(kWarn);
-
-    InitializeLAPICTimer();
 
     SetupSegments();
 
@@ -278,6 +275,10 @@ extern "C" void KernelMainNewStack(
     auto main_window = std::make_shared<Window>(
         160, 52, frame_buffer_config.pixel_format);
     DrawWindow(*main_window->Writer(), "Hello, window!");
+
+    auto console_window = std::make_shared<Window>(
+        Console::kColumns * 8, Console::kRows * 16, frame_buffer_config.pixel_format);
+    console->SetWindow(console_window);
     
 
     FrameBuffer screen;
@@ -301,13 +302,18 @@ extern "C" void KernelMainNewStack(
         .SetWindow(main_window)
         .Move({100, 100})
         .ID();
+    console->SetLayerID(layer_manager->NewLayer()
+        .SetWindow(console_window)
+        .Move({0,0})
+        .ID());
     
     layer_manager->UpDown(bglayer_id, 0);
-    layer_manager->UpDown(mouse_layer_id, 1);
-    layer_manager->UpDown(main_window_layer_id, 1);
+    layer_manager->UpDown(console->LayerID(), 1);
+    layer_manager->UpDown(main_window_layer_id, 2);
+    layer_manager->UpDown(mouse_layer_id, 3);
 
     // Draw the layers to the screen in order of heights
-    layer_manager->Draw();
+    layer_manager->Draw({{0,0}, screen_size});
 
     char str[128];
     unsigned int count = 0;
@@ -319,7 +325,7 @@ extern "C" void KernelMainNewStack(
         sprintf(str, "%010u", count);
         FillRectangle(*main_window->Writer(), {24, 28}, {8 * 10, 16}, {0xc6, 0xc6, 0xc6});
         WriteString(*main_window->Writer(), {24, 28}, str, {0, 0, 0});
-        layer_manager->Draw();
+        layer_manager->Draw(main_window_layer_id);
 
         
         __asm__("cli");
