@@ -15,6 +15,7 @@ class FrameBuffer {
 
 
         FrameBufferWriter& Writer() {return *writer_;}
+        const FrameBufferConfig& Config() const { return config_; }
 
     private:
         FrameBufferConfig config_{};
